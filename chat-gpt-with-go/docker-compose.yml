@@ -1,0 +1,32 @@
+version: '3'
+
+# Define services
+services:
+
+  # App Service
+  go:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: Dockerfile
+    container_name: 'go-tienngay'
+    ports:
+      - "2210:2210" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: unless-stopped 
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - goland
+  mailer:
+    # Configuration for building the docker image for the service
+    build:
+      context: . # Use an image built from the specified dockerfile in the current directory.
+      dockerfile: mailer/Dockerfile
+    container_name: 'mailer-tienngay'
+    ports:
+      - "2211:2211" # Forward the exposed port 8080 on the container to port 8080 on the host machine
+    restart: unless-stopped 
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - goland
+
+networks: 
+  goland:
+    driver: bridge
